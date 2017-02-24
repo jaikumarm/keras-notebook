@@ -1,0 +1,18 @@
+machine:
+  services:
+    - docker
+dependencies:
+  post:
+    - docker build -t jaikumarm/keras-notebook . | cat # workaround progress weirdness
+test:
+  post:
+    - docker run --rm jaikumarm/keras-notebook python -V
+    - docker run --rm jaikumarm/keras-notebook python -c "import theano; print (theano.__version__)"
+    - docker run --rm jaikumarm/keras-notebook python -c "import os; os.environ['KERAS_BACKEND']='theano'; import keras; print (keras.__version__)"
+    - docker run --rm jaikumarm/keras-notebook python -c "import hyperopt; print (hyperopt.__version__)"
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push jaikumarm/keras-notebook
