@@ -7,6 +7,11 @@ RUN apt-get install gcc-4.9 g++-4.9 -y && \
     ln -s  /usr/bin/g++-4.9 /usr/bin/g++ -f && \
     apt-get clean
 
+RUN wget --quiet http://downloads.sourceforge.net/project/ta-lib/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz -O ta-lib-0.4.0-src.tar.gz &&\
+	tar xvzf ta-lib-0.4.0-src.tar.gz && cd ta-lib && \
+	./configure --prefix=/usr && \
+	make && make install &&\
+	cd .. && rm ta-lib-0.4.0-src.tar.gz && rm -r ta-lib
 
 RUN conda install --quiet --yes -n python2 -c jaikumarm \
 	'theano=0.9.0.dev4' \
